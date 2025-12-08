@@ -55,8 +55,11 @@ function PagesContent() {
 }
 
 export default function Pages() {
+    // Get base path from environment or use default
+    const basePath = import.meta.env.BASE_URL || '/';
+    
     return (
-        <Router>
+        <Router basename={basePath}>
             <PagesContent />
         </Router>
     );
