@@ -34,16 +34,39 @@ jobs:
       - name: Set base URL
         id: base_url
         run: |
-          if [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
+          REPO_NAME="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          if [ "$REPO_NAME" = "$OWNER.github.io" ]; then
             echo "base_url=/" >> $GITHUB_OUTPUT
           else
-            echo "base_url=/${{ github.event.repository.name }}/" >> $GITHUB_OUTPUT
+            echo "base_url=/$REPO_NAME/" >> $GITHUB_OUTPUT
           fi
+          echo "Repository: $REPO_NAME"
+          echo "Owner: $OWNER"
+          echo "Base URL: $(cat $GITHUB_OUTPUT | grep base_url | cut -d'=' -f2)"
 
       - name: Build
         run: npm run build
         env:
           BASE_URL: ${{ steps.base_url.outputs.base_url }}
+          NODE_ENV: production
+
+      - name: Verify build
+        run: |
+          echo "Build contents:"
+          ls -la dist/
+          echo "Checking index.html:"
+          if [ -f dist/index.html ]; then
+            cat dist/index.html | head -20
+          else
+            echo "ERROR: index.html not found in dist!"
+            exit 1
+          fi
+
+      - name: Ensure .nojekyll exists
+        run: |
+          touch dist/.nojekyll
+          echo ".nojekyll file created"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
