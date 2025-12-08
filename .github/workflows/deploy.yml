@@ -36,14 +36,17 @@ jobs:
         run: |
           REPO_NAME="${{ github.event.repository.name }}"
           OWNER="${{ github.repository_owner }}"
+          echo "Repository name: $REPO_NAME"
+          echo "Repository owner: $OWNER"
           if [ "$REPO_NAME" = "$OWNER.github.io" ]; then
-            echo "base_url=/" >> $GITHUB_OUTPUT
+            BASE_URL="/"
+            echo "Detected user/organization page - using base: /"
           else
-            echo "base_url=/$REPO_NAME/" >> $GITHUB_OUTPUT
+            BASE_URL="/$REPO_NAME/"
+            echo "Detected project page - using base: /$REPO_NAME/"
           fi
-          echo "Repository: $REPO_NAME"
-          echo "Owner: $OWNER"
-          echo "Base URL: $(cat $GITHUB_OUTPUT | grep base_url | cut -d'=' -f2)"
+          echo "base_url=$BASE_URL" >> $GITHUB_OUTPUT
+          echo "Final BASE_URL: $BASE_URL"
 
       - name: Build
         run: npm run build
@@ -55,12 +58,24 @@ jobs:
         run: |
           echo "Build contents:"
           ls -la dist/
+          echo ""
           echo "Checking index.html:"
           if [ -f dist/index.html ]; then
-            cat dist/index.html | head -20
+            echo "=== Full index.html ==="
+            cat dist/index.html
+            echo ""
+            echo "=== Checking for script tags ==="
+            grep -i "script" dist/index.html || echo "No script tags found!"
           else
             echo "ERROR: index.html not found in dist!"
             exit 1
+          fi
+          echo ""
+          echo "=== Checking assets directory ==="
+          if [ -d dist/assets ]; then
+            ls -la dist/assets/ | head -10
+          else
+            echo "WARNING: assets directory not found!"
           fi
 
       - name: Ensure .nojekyll exists
