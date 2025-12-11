@@ -41,8 +41,17 @@ jobs:
           echo "Build concluído! Verificando arquivos gerados:"
           ls -la dist/ || dir dist/
           echo ""
-          echo "Verificando index.html gerado:"
-          head -15 dist/index.html || type dist\index.html
+          echo "Verificando se index.html foi processado:"
+          if grep -q "/src/main.jsx" dist/index.html 2>/dev/null || findstr "/src/main.jsx" dist\index.html >nul 2>&1; then
+            echo "❌ ERRO: index.html não foi processado! Ainda contém /src/main.jsx"
+            echo "Conteúdo do index.html:"
+            cat dist/index.html
+            exit 1
+          else
+            echo "✅ index.html foi processado corretamente!"
+            echo "Primeiras linhas do index.html:"
+            head -20 dist/index.html || type dist\index.html | more
+          fi
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           # O base path será detectado automaticamente:
