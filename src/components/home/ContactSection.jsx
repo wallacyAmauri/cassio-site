@@ -21,7 +21,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { uploadFile } from '@/api/base44Client';
+// BASE44 DESABILITADO
+// import { uploadFile } from '@/api/base44Client';
 
 export default function ContactSection() {
   const navigate = useNavigate();
@@ -57,13 +58,18 @@ export default function ContactSection() {
       }
       setUploadedFile(file);
       
-      try {
-        const { file_url } = await uploadFile(file);
-        setFileUrl(file_url);
-      } catch (error) {
-        console.error('Erro ao fazer upload:', error);
-        alert('Erro ao enviar arquivo. Tente novamente.');
-      }
+      // BASE44 DESABILITADO - Upload desabilitado
+      // try {
+      //   const { file_url } = await uploadFile(file);
+      //   setFileUrl(file_url);
+      // } catch (error) {
+      //   console.error('Erro ao fazer upload:', error);
+      //   alert('Erro ao enviar arquivo. Tente novamente.');
+      // }
+      
+      // Upload desabilitado - apenas armazena o arquivo localmente
+      alert('Upload de arquivo temporariamente desabilitado. O arquivo será mencionado na mensagem do WhatsApp.');
+      setFileUrl('arquivo-anexado'); // Marca que há arquivo, mas sem URL
     }
   };
 
