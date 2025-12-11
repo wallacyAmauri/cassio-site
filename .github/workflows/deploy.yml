@@ -36,8 +36,10 @@ jobs:
         run: npm run build
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-          # O base path será detectado automaticamente do nome do repositório
-          # Se precisar customizar, defina VITE_BASE_PATH aqui
+          # O base path será detectado automaticamente:
+          # - User pages (username.github.io): base path = '/'
+          # - Project pages (outros repositórios): base path = '/repo-name/'
+          # Para customizar, defina VITE_BASE_PATH aqui
       
       - name: Setup Pages
         uses: actions/configure-pages@v4

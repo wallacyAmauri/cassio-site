@@ -34,18 +34,21 @@ git push -u origin main
 
 O projeto detecta automaticamente o base path baseado no nome do repositório. 
 
+**Para repositórios user/organization** (ex: `usuario.github.io` ou repositório com nome `usuario.github.io`):
+- O base path será automaticamente `/`
+- Não é necessário configurar nada
+- **Exemplo**: Se seu repositório é `wallacyamauri.github.io`, o base path será `/`
+
 **Para repositórios de projeto** (ex: `usuario.github.io/repo-name`):
 - O base path será automaticamente `/repo-name/`
 - Não é necessário configurar nada
-
-**Para repositórios user/organization** (ex: `usuario.github.io`):
-- O base path será `/`
-- Não é necessário configurar nada
+- **Exemplo**: Se seu repositório é `usuario/meu-site`, o base path será `/meu-site/`
 
 **Para customizar manualmente:**
 - Crie um arquivo `.env` na raiz do projeto
 - Adicione: `VITE_BASE_PATH=/seu-base-path/`
 - Exemplo: `VITE_BASE_PATH=/meu-site/`
+- Ou defina no workflow do GitHub Actions como variável de ambiente
 
 ## 🚀 Deploy Automático
 

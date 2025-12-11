@@ -34,8 +34,13 @@ O projeto está configurado para fazer deploy automático no GitHub Pages.
    - Toda vez que você fizer push na branch `main` ou `master`, o site será atualizado
 
 3. **URL do site:**
-   - Se for um repositório de projeto: `https://seu-usuario.github.io/nome-do-repositorio/`
-   - Se for um repositório user/organization: `https://seu-usuario.github.io/`
+   - **User/Organization pages**: `https://seu-usuario.github.io/` (base path: `/`)
+     - Exemplo: repositório `wallacyamauri.github.io` → URL: `https://wallacyamauri.github.io/`
+   - **Project pages**: `https://seu-usuario.github.io/nome-do-repositorio/` (base path: `/nome-do-repositorio/`)
+   
+   O base path é detectado automaticamente:
+   - Se o repositório se chama `usuario.github.io` → base path = `/`
+   - Caso contrário → base path = `/nome-do-repositorio/`
 
 ### Deploy manual:
 
