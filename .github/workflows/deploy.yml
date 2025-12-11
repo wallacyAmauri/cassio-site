@@ -49,39 +49,70 @@ jobs:
           echo "Final BASE_URL: $BASE_URL"
 
       - name: Build
-        run: npm run build
+        run: |
+          echo "Building with BASE_URL: ${{ steps.base_url.outputs.base_url }}"
+          BASE_URL="${{ steps.base_url.outputs.base_url }}" npm run build
         env:
           BASE_URL: ${{ steps.base_url.outputs.base_url }}
           NODE_ENV: production
 
       - name: Verify build
         run: |
-          echo "Build contents:"
-          ls -la dist/
+          echo "=== Build Verification ==="
           echo ""
-          echo "Checking index.html:"
+          echo "1. Checking dist directory:"
+          ls -la dist/ || (echo "ERROR: dist directory not found!" && exit 1)
+          echo ""
+          echo "2. Checking index.html:"
           if [ -f dist/index.html ]; then
-            echo "=== Full index.html ==="
+            echo "✓ index.html exists"
+            echo ""
+            echo "Content of index.html:"
             cat dist/index.html
             echo ""
-            echo "=== Checking for script tags ==="
-            grep -i "script" dist/index.html || echo "No script tags found!"
+            echo "3. Checking for compiled scripts:"
+            if grep -q "src=\"/src/main.jsx\"" dist/index.html; then
+              echo "❌ ERROR: index.html still contains /src/main.jsx (build failed to process)"
+              exit 1
+            elif grep -q "assets/" dist/index.html; then
+              echo "✓ index.html contains compiled assets"
+            else
+              echo "⚠ WARNING: Could not verify script tags"
+            fi
           else
-            echo "ERROR: index.html not found in dist!"
+            echo "❌ ERROR: index.html not found in dist!"
             exit 1
           fi
           echo ""
-          echo "=== Checking assets directory ==="
+          echo "4. Checking assets directory:"
           if [ -d dist/assets ]; then
+            echo "✓ assets directory exists"
+            echo "Files in assets:"
             ls -la dist/assets/ | head -10
+            ASSET_COUNT=$(ls -1 dist/assets/ | wc -l)
+            if [ "$ASSET_COUNT" -eq 0 ]; then
+              echo "❌ ERROR: No assets found in dist/assets/"
+              exit 1
+            else
+              echo "✓ Found $ASSET_COUNT asset files"
+            fi
           else
-            echo "WARNING: assets directory not found!"
+            echo "❌ ERROR: assets directory not found!"
+            exit 1
           fi
 
       - name: Ensure .nojekyll exists
         run: |
-          touch dist/.nojekyll
-          echo ".nojekyll file created"
+          if [ ! -f dist/.nojekyll ]; then
+            touch dist/.nojekyll
+            echo "✓ Created .nojekyll file"
+          else
+            echo "✓ .nojekyll already exists"
+          fi
+          echo ""
+          echo "5. Final verification:"
+          echo "Files in dist root:"
+          ls -la dist/ | grep -E "^-|^d" | head -15
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
