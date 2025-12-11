@@ -1,7 +1,7 @@
-import { base44 } from './base44Client';
+import { getBase44Client } from './base44Client';
 
-
-
-
-// auth sdk:
-export const User = base44.auth;
+// Lazy export - only access Base44 auth when needed
+export const getUser = async () => {
+  const base44 = await getBase44Client();
+  return base44.auth;
+};

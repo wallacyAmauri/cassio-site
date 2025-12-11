@@ -22,7 +22,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { base44 } from '@/api/base44Client';
+import { uploadFile } from '@/api/base44Client';
 
 export default function ContatoModal({ isOpen, onClose }) {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export default function ContatoModal({ isOpen, onClose }) {
       
       // Upload do arquivo
       try {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const { file_url } = await uploadFile(file);
         setFileUrl(file_url);
       } catch (error) {
         console.error('Erro ao fazer upload:', error);

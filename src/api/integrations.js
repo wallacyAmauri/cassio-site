@@ -1,23 +1,45 @@
-import { base44 } from './base44Client';
+import { getBase44Client } from './base44Client';
 
+// Lazy exports - only access Base44 when needed
+export const getCore = async () => {
+  const base44 = await getBase44Client();
+  return base44.integrations.Core;
+};
 
+export const InvokeLLM = async (...args) => {
+  const Core = await getCore();
+  return Core.InvokeLLM(...args);
+};
 
+export const SendEmail = async (...args) => {
+  const Core = await getCore();
+  return Core.SendEmail(...args);
+};
 
-export const Core = base44.integrations.Core;
+export const UploadFile = async (...args) => {
+  const Core = await getCore();
+  return Core.UploadFile(...args);
+};
 
-export const InvokeLLM = base44.integrations.Core.InvokeLLM;
+export const GenerateImage = async (...args) => {
+  const Core = await getCore();
+  return Core.GenerateImage(...args);
+};
 
-export const SendEmail = base44.integrations.Core.SendEmail;
+export const ExtractDataFromUploadedFile = async (...args) => {
+  const Core = await getCore();
+  return Core.ExtractDataFromUploadedFile(...args);
+};
 
-export const UploadFile = base44.integrations.Core.UploadFile;
+export const CreateFileSignedUrl = async (...args) => {
+  const Core = await getCore();
+  return Core.CreateFileSignedUrl(...args);
+};
 
-export const GenerateImage = base44.integrations.Core.GenerateImage;
-
-export const ExtractDataFromUploadedFile = base44.integrations.Core.ExtractDataFromUploadedFile;
-
-export const CreateFileSignedUrl = base44.integrations.Core.CreateFileSignedUrl;
-
-export const UploadPrivateFile = base44.integrations.Core.UploadPrivateFile;
+export const UploadPrivateFile = async (...args) => {
+  const Core = await getCore();
+  return Core.UploadPrivateFile(...args);
+};
 
 
 
