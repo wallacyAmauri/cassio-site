@@ -53,12 +53,32 @@ jobs:
           echo "Building with BASE_URL: ${{ steps.base_url.outputs.base_url }}"
           export BASE_URL="${{ steps.base_url.outputs.base_url }}"
           echo "BASE_URL environment variable set to: $BASE_URL"
+          echo ""
+          echo "Running: npm run build"
           npm run build
-          echo "Build completed. Checking if it was successful..."
+          echo ""
+          echo "Build completed. Verifying..."
           if [ ! -d "dist" ]; then
             echo "❌ ERROR: dist directory was not created!"
             exit 1
           fi
+          echo "✓ dist directory exists"
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ ERROR: dist/index.html was not created!"
+            exit 1
+          fi
+          echo "✓ dist/index.html exists"
+          echo ""
+          echo "Checking if index.html was processed correctly..."
+          if grep -q 'src="/src/main.jsx"' dist/index.html || grep -q "src='/src/main.jsx'" dist/index.html; then
+            echo "❌ CRITICAL ERROR: dist/index.html still contains /src/main.jsx"
+            echo "This means Vite did NOT process the HTML during build!"
+            echo ""
+            echo "Content of dist/index.html:"
+            cat dist/index.html
+            exit 1
+          fi
+          echo "✓ index.html was processed correctly (no /src/main.jsx found)"
         env:
           BASE_URL: ${{ steps.base_url.outputs.base_url }}
           NODE_ENV: production
