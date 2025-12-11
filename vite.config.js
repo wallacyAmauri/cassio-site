@@ -5,18 +5,14 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.BASE_URL || '/',
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false,
-    emptyOutDir: true,
-  },
+  // Base path: prioridade para VITE_BASE_PATH, depois GITHUB_REPOSITORY, depois '/'
+  base: process.env.VITE_BASE_PATH 
+    ? process.env.VITE_BASE_PATH 
+    : process.env.GITHUB_REPOSITORY 
+      ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` 
+      : '/',
   server: {
-    host: '0.0.0.0',
-    port: 5173,
-    strictPort: false,
-    open: false
+    allowedHosts: true
   },
   resolve: {
     alias: {

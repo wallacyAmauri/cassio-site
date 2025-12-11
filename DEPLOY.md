@@ -1,34 +1,95 @@
-# Instruções de Deploy para GitHub Pages
+# 🚀 Guia de Deploy no GitHub Pages
 
-## Configuração no GitHub
+Este guia explica como fazer o deploy deste projeto no GitHub Pages.
 
-1. **Vá para Settings → Pages** no seu repositório
-2. **Em "Source"**, selecione **"GitHub Actions"** (NÃO selecione "Deploy from a branch")
-3. Salve as configurações
+## 📋 Pré-requisitos
 
-## Verificação
+- Conta no GitHub
+- Repositório criado no GitHub
+- Git configurado localmente
 
-Após fazer push para a branch `main`, o workflow será executado automaticamente. Você pode verificar o progresso em:
-- **Actions** → Aba "Deploy to GitHub Pages"
+## 🔧 Configuração Inicial
 
-## URL do Site
+### 1. Preparar o repositório
 
-Se o repositório for `wallacyamauri.github.io`:
-- URL: `https://wallacyamauri.github.io/`
+```bash
+# Se ainda não inicializou o git
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+git push -u origin main
+```
 
-Se o repositório for outro nome (ex: `cassio-trafego-pago`):
-- URL: `https://wallacyamauri.github.io/cassio-trafego-pago/`
+### 2. Habilitar GitHub Pages
 
-## Solução de Problemas
+1. Vá para o repositório no GitHub
+2. Clique em **Settings** (Configurações)
+3. No menu lateral, clique em **Pages**
+4. Em **Source**, selecione **GitHub Actions**
+5. Salve as alterações
 
-### Erro 404 ao acessar arquivos
-- Certifique-se de que o GitHub Pages está configurado para usar **GitHub Actions**, não uma branch
-- Verifique se o workflow foi executado com sucesso em **Actions**
-- Aguarde alguns minutos após o push para o deploy ser concluído
+### 3. Configurar Base Path (se necessário)
 
-### Arquivos fonte sendo servidos em vez do build
-- Verifique se o workflow está fazendo o build corretamente
-- Certifique-se de que o diretório `dist` está sendo enviado como artifact
-- Verifique os logs do workflow em **Actions**
+O projeto detecta automaticamente o base path baseado no nome do repositório. 
 
+**Para repositórios de projeto** (ex: `usuario.github.io/repo-name`):
+- O base path será automaticamente `/repo-name/`
+- Não é necessário configurar nada
+
+**Para repositórios user/organization** (ex: `usuario.github.io`):
+- O base path será `/`
+- Não é necessário configurar nada
+
+**Para customizar manualmente:**
+- Crie um arquivo `.env` na raiz do projeto
+- Adicione: `VITE_BASE_PATH=/seu-base-path/`
+- Exemplo: `VITE_BASE_PATH=/meu-site/`
+
+## 🚀 Deploy Automático
+
+Após configurar o GitHub Pages, o deploy será automático:
+
+1. **Push na branch main/master** → Deploy automático
+2. **Workflow manual** → Vá em Actions e execute o workflow manualmente
+
+O workflow está configurado em `.github/workflows/deploy.yml`
+
+## 📝 Verificando o Deploy
+
+1. Após o push, vá em **Actions** no GitHub
+2. Aguarde o workflow completar (ícone verde ✓)
+3. Vá em **Settings > Pages** para ver a URL do site
+4. A URL será: `https://seu-usuario.github.io/nome-do-repositorio/`
+
+## 🔍 Troubleshooting
+
+### Site não carrega corretamente
+
+- Verifique se o base path está correto
+- Confirme que o workflow completou com sucesso
+- Verifique os logs em **Actions**
+
+### Rotas não funcionam
+
+- O arquivo `public/404.html` está configurado para redirecionar rotas
+- Certifique-se de que ele está no repositório
+- Verifique se o base path está correto
+
+### Build falha
+
+- Verifique os logs em **Actions**
+- Confirme que todas as dependências estão no `package.json`
+- Teste o build localmente: `npm run build`
+
+## 📚 Recursos Adicionais
+
+- [Documentação do GitHub Pages](https://docs.github.com/en/pages)
+- [Documentação do Vite](https://vitejs.dev/)
+- [React Router](https://reactrouter.com/)
+
+---
+
+**Dúvidas?** Entre em contato ou abra uma issue no repositório.
 
