@@ -22,12 +22,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { base44 } from '@/api/base44Client';
 
 export default function ContatoModal({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [fileBase64, setFileBase64] = useState('');
+  const [fileUrl, setFileUrl] = useState('');
 
   const whatsappNumber = "5581989967923";
 
@@ -58,21 +59,13 @@ export default function ContatoModal({ isOpen, onClose }) {
       }
       setUploadedFile(file);
       
-      // Converter arquivo para base64
+      // Upload do arquivo
       try {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result;
-          setFileBase64(base64String);
-        };
-        reader.onerror = () => {
-          console.error('Erro ao ler arquivo');
-          alert('Erro ao processar arquivo. Tente novamente.');
-        };
-        reader.readAsDataURL(file);
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        setFileUrl(file_url);
       } catch (error) {
-        console.error('Erro ao processar arquivo:', error);
-        alert('Erro ao processar arquivo. Tente novamente.');
+        console.error('Erro ao fazer upload:', error);
+        alert('Erro ao enviar arquivo. Tente novamente.');
       }
     }
   };
@@ -94,8 +87,8 @@ export default function ContatoModal({ isOpen, onClose }) {
 💬 *Mensagem:*
 ${mensagem || 'Não informada'}`;
 
-    if (uploadedFile) {
-      texto += `\n\n📎 *Arquivo anexado:* ${uploadedFile.name} (${(uploadedFile.size / 1024).toFixed(2)} KB)`;
+    if (fileUrl) {
+      texto += `\n\n📎 *Arquivo anexado:* ${fileUrl}`;
     }
 
     const url = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(texto)}`;
@@ -106,7 +99,7 @@ ${mensagem || 'Não informada'}`;
     // Reseta o formulário e fecha o modal
     reset();
     setUploadedFile(null);
-    setFileBase64('');
+    setFileUrl('');
     onClose();
     setTimeout(() => {
       navigate(createPageUrl('Obrigado'));

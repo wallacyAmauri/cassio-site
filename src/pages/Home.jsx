@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
-import ContatoModal from '../components/ContatoModal';
-import ProcessSection from '../components/home/ProcessSection';
+// import ProcessSection from '../components/home/ProcessSection';
+import ContactSection from '../components/home/ContactSection';
 import StatsSection from '../components/home/StatsSection';
 import TestimonialCarousel from '../components/home/TestimonialCarousel';
 import CountUp from '../components/animations/CountUp';
@@ -34,7 +34,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isContatoModalOpen, setIsContatoModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -155,7 +154,7 @@ export default function Home() {
               {[
                 { label: 'Sobre', id: 'sobre' },
                 { label: 'Serviços', id: 'servicos' },
-                { label: 'Depoimentos', id: 'depoimentos' }
+                { label: 'Contato', id: 'contato' }
               ].map((item) => (
                 <button
                   key={item.id}
@@ -165,12 +164,6 @@ export default function Home() {
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={() => setIsContatoModalOpen(true)}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-semibold rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all"
-              >
-                Contato
-              </button>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -196,7 +189,7 @@ export default function Home() {
                 {[
                   { label: 'Sobre', id: 'sobre' },
                   { label: 'Serviços', id: 'servicos' },
-                  { label: 'Depoimentos', id: 'depoimentos' }
+                  { label: 'Contato', id: 'contato' }
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -206,12 +199,6 @@ export default function Home() {
                     {item.label}
                   </button>
                 ))}
-                <button
-                  onClick={() => setIsContatoModalOpen(true)}
-                  className="block w-full text-center px-4 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-semibold rounded-lg"
-                >
-                  Contato
-                </button>
               </div>
             </motion.div>
           )}
@@ -325,7 +312,7 @@ export default function Home() {
                 className="space-y-6"
               >
                 <motion.button
-                  onClick={() => setIsContatoModalOpen(true)}
+                  onClick={() => scrollToSection('contato')}
                   className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold text-sm sm:text-base rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all duration-500 overflow-hidden min-h-[48px]"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
@@ -533,7 +520,7 @@ export default function Home() {
 
 
       {/* Process Section */}
-      <ProcessSection onContactClick={() => setIsContatoModalOpen(true)} />
+      {/* <ProcessSection onContactClick={() => setIsContatoModalOpen(true)} /> */}
 
       {/* Sobre Section - Novo Layout Profissional */}
       <section id="sobre" className="py-12 sm:py-16 lg:py-32 bg-gradient-to-b from-white to-slate-50">
@@ -633,7 +620,7 @@ export default function Home() {
             className="mt-12 text-center"
           >
             <motion.button
-              onClick={() => setIsContatoModalOpen(true)}
+              onClick={() => scrollToSection('contato')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full hover:shadow-xl hover:shadow-emerald-500/30 transition-all overflow-hidden group text-sm sm:text-base min-h-[48px]"
@@ -652,7 +639,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Depoimentos em Vídeo Section */}
+      {/* Depoimentos em Vídeo Section 
       <section id="depoimentos" className="py-12 sm:py-16 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -675,7 +662,6 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Plataformas que trabalhamos */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
             {[
               { 
@@ -717,7 +703,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Testimonial Carousel */}
           <TestimonialCarousel testimonials={testimonials} />
 
           <motion.div
@@ -734,9 +719,12 @@ export default function Home() {
               <MessageCircle className="w-5 h-5" />
               Quero Melhorar Meus Resultados
             </button>
-          </motion.div>
-        </div>
-      </section>
+            </motion.div>
+            </div>
+            </section> */}
+
+      {/* Contact Section */}
+      <ContactSection />
 
       {/* CTA Final */}
       <section className="py-12 sm:py-16 lg:py-32 bg-gradient-to-br from-[#0a1628] via-[#0d2847] to-[#1a3a5c] relative overflow-hidden">
@@ -779,7 +767,7 @@ export default function Home() {
 
             <div className="flex justify-center">
               <motion.button
-                onClick={() => setIsContatoModalOpen(true)}
+                onClick={() => scrollToSection('contato')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 lg:px-10 py-3.5 sm:py-4 lg:py-5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-full transition-all hover:shadow-xl hover:shadow-emerald-500/30 text-sm sm:text-base lg:text-lg overflow-hidden group min-h-[48px]"
@@ -828,12 +816,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Modal de Contato */}
-      <ContatoModal 
-        isOpen={isContatoModalOpen} 
-        onClose={() => setIsContatoModalOpen(false)} 
-      />
       </div>
       </>
       );
