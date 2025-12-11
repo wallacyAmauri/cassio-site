@@ -33,7 +33,16 @@ jobs:
         run: npm ci
       
       - name: Build
-        run: npm run build
+        run: |
+          echo "Repositório: ${{ github.repository }}"
+          echo "Fazendo build..."
+          npm run build
+          echo ""
+          echo "Build concluído! Verificando arquivos gerados:"
+          ls -la dist/ || dir dist/
+          echo ""
+          echo "Verificando index.html gerado:"
+          head -15 dist/index.html || type dist\index.html
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           # O base path será detectado automaticamente:

@@ -14,15 +14,20 @@ function getBasePath() {
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
     
     // Se o repositório é um user page (username.github.io), base path é '/'
+    // Exemplo: wallacyamauri/wallacyamauri.github.io -> base path = '/'
     if (repo === `${owner}.github.io` || repo === owner) {
+      console.log(`[Vite Config] User page detectado: base path = '/'`)
       return '/'
     }
     
     // Caso contrário, é um project page, usa o nome do repo
-    return `/${repo}/`
+    const basePath = `/${repo}/`
+    console.log(`[Vite Config] Project page detectado: base path = '${basePath}'`)
+    return basePath
   }
   
-  // Fallback: sem base path
+  // Fallback: sem base path (desenvolvimento local)
+  console.log(`[Vite Config] Modo desenvolvimento: base path = '/'`)
   return '/'
 }
 
